@@ -2,17 +2,19 @@ package com.rappytv.prevtb.events;
 
 import com.rappytv.prevtb.main.Main;
 import com.rappytv.prevtb.util.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-public class ToolUse {
+public class OnTickEvent {
 
     @SubscribeEvent
-    public void onUse(BlockEvent.BreakEvent e) {
+    public void onTick(TickEvent e) {
         if(!Main.enabled) return;
-        EntityPlayer p = e.getPlayer();
+        if(Minecraft.getMinecraft().player == null) return;
+        EntityPlayer p = Minecraft.getMinecraft().player;
         ItemStack i = p.getHeldItemMainhand();
 
         if(i == null) return;

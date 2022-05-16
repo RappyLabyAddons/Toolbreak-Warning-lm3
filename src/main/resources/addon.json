@@ -2,8 +2,8 @@
   "uuid": "%uuid%",
   "name": "ToolBreak Warning",
   "mainClass": "com.rappytv.prevtb.main.Main",
-  "description": "Stops you from using your currently used tool when its almost destroyed. [CUSTOMIZABLE]",
-  "version": 1.0,
+  "description": "[FORGE ONLY!!!] Stops you from using your currently used tool when its almost destroyed.",
+  "version": 1.1,
   "author": "RappyTV#6969",
   "category": 2,
   "icon": "https://cdn.discordapp.com/attachments/962708390805655593/974731356137467995/icon.png"
