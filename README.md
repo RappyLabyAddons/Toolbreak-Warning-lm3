@@ -1,8 +1,10 @@
 # **Toolbreak Warning**
+## Only works with forge
 > With this plugin you can prevent breaking your expensive tools, especially when you're mining with high efficiency enchantments and/or haste.
 
 ### You can customize these Settings:
 - If the addon is enabled or not
+- If the debug mode is enabled or not (not recommended)
 - The message that pops up, when your tool's durability is low
 - At what percentage of durability the warning should come (customizable for each tooltype)
 
