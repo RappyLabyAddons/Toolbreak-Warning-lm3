@@ -3,6 +3,7 @@ package com.rappytv.tbw.util;
 import com.rappytv.tbw.main.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,10 +20,10 @@ public class Util {
     public static boolean axeWarned = false;
     public static boolean shovelWarned = false;
 
-    private static int[] sword = {268, 272, 267, 283, 276};
-    private static int[] pick = {270, 274, 257, 285, 278};
-    private static int[] axe = {271, 275, 258, 286, 279};
-    private static int[] spade = {269, 273, 256, 284, 277};
+    private static final int[] sword = {268, 272, 267, 283, 276};
+    private static final int[] pick = {270, 274, 257, 285, 278};
+    private static final int[] axe = {271, 275, 258, 286, 279};
+    private static final int[] spade = {269, 273, 256, 284, 277};
 
     public static void msg(String text, boolean prefix) {
         Main.getMain().getApi().displayMessageInChat(prefix ? Main.prefix + text : text);
@@ -35,6 +36,11 @@ public class Util {
         formatter.setDecimalFormatSymbols(symbols);
 
         return formatter.format(number);
+    }
+
+    public static boolean isLastHit(ItemStack i) {
+        if(!Main.lastHitWarn) return false;
+        return (i.getMaxDamage() - i.getItemDamage()) == 0;
     }
 
     public static boolean isSword(ItemStack i) {
@@ -69,9 +75,9 @@ public class Util {
         else return i.getItem().equals(Item.getItemById(spade[4]));
     }
 
-    public static void swordUsed(ItemStack itemStack) {
-        int itemWarnInt = (Main.warnPercentageSword * itemStack.getMaxDamage()) / 100;
-        int itemUsedInt = itemStack.getMaxDamage() - itemStack.getItemDamage();
+    public static void swordUsed(ItemStack i) {
+        int itemWarnInt = (Main.warnPercentageSword * i.getMaxDamage()) / 100;
+        int itemUsedInt = i.getMaxDamage() - i.getItemDamage();
         if(Main.debug) {
             msg("\u00A7c\u00A7l------ Event triggered ------\n\u00A7eEvent: \u00A74Sword in main hand\n\u00A7eTool used: \u00A74" + (Main.format ? formatNumber(itemUsedInt) : itemUsedInt) + "\n\u00A7eTool warn: \u00A74" + (Main.format ? formatNumber(itemWarnInt) : itemWarnInt) + "\n\u00A7c\u00A7l---------------------------", false);
         }
@@ -84,14 +90,22 @@ public class Util {
                 Minecraft.getMinecraft().player.playSound(SoundEvents.BLOCK_ANVIL_USE, 100f, 0f);
                 swordWarned = true;
             }
+        } else if(isLastHit(i)) {
+            if(!swordWarned) {
+                msg(Main.lastHitMsg, true);
+                msg(Main.lastHitMsg, true);
+                msg(Main.lastHitMsg, true);
+                Minecraft.getMinecraft().player.playSound(SoundEvents.BLOCK_ANVIL_USE, 100f, 0f);
+                swordWarned = true;
+            }
         } else {
             swordWarned = false;
         }
     }
 
-    public static void pickaxeUsed(ItemStack itemStack) {
-        int itemWarnInt = (Main.warnPercentagePickaxe * itemStack.getMaxDamage()) / 100;
-        int itemUsedInt = itemStack.getMaxDamage() - itemStack.getItemDamage();
+    public static void pickaxeUsed(ItemStack i) {
+        int itemWarnInt = (Main.warnPercentagePickaxe * i.getMaxDamage()) / 100;
+        int itemUsedInt = i.getMaxDamage() - i.getItemDamage();
         if(Main.debug) {
             msg("\u00A7c\u00A7l------ Event triggered ------\n\u00A7eEvent: \u00A74Pickaxe in main hand\n\u00A7eTool used: \u00A74" + (Main.format ? formatNumber(itemUsedInt) : itemUsedInt) + "\n\u00A7eTool warn: \u00A74" + (Main.format ? formatNumber(itemWarnInt) : itemWarnInt) + "\n\u00A7c\u00A7l---------------------------", false);
         }
@@ -102,14 +116,20 @@ public class Util {
                 Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
                 pickWarned = true;
             }
+        } else if(isLastHit(i)) {
+            if(!pickWarned) {
+                msg(Main.lastHitMsg, true);
+                Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
+                pickWarned = true;
+            }
         } else {
             pickWarned = false;
         }
     }
 
-    public static void axeUsed(ItemStack itemStack) {
-        int itemWarnInt = (Main.warnPercentageAxe * itemStack.getMaxDamage()) / 100;
-        int itemUsedInt = itemStack.getMaxDamage() - itemStack.getItemDamage();
+    public static void axeUsed(ItemStack i) {
+        int itemWarnInt = (Main.warnPercentageAxe * i.getMaxDamage()) / 100;
+        int itemUsedInt = i.getMaxDamage() - i.getItemDamage();
         if(Main.debug) {
             msg("\u00A7c\u00A7l------ Event triggered ------\n\u00A7eEvent: \u00A74Axe in main hand\n\u00A7eTool used: \u00A74" + (Main.format ? Util.formatNumber(itemUsedInt) : itemUsedInt) + "\n\u00A7eTool warn: \u00A74" + (Main.format ? Util.formatNumber(itemWarnInt) : itemWarnInt) + "\n\u00A7c\u00A7l---------------------------", false);
         }
@@ -120,14 +140,20 @@ public class Util {
                 Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
                 axeWarned = true;
             }
+        } else if(isLastHit(i)) {
+            if(!axeWarned) {
+                msg(Main.lastHitMsg, true);
+                Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
+                axeWarned = true;
+            }
         } else {
             axeWarned = false;
         }
     }
 
-    public static void shovelUsed(ItemStack itemStack) {
-        int itemWarnInt = (Main.warnPercentageShovel * itemStack.getMaxDamage()) / 100;
-        int itemUsedInt = itemStack.getMaxDamage() - itemStack.getItemDamage();
+    public static void shovelUsed(ItemStack i) {
+        int itemWarnInt = (Main.warnPercentageShovel * i.getMaxDamage()) / 100;
+        int itemUsedInt = i.getMaxDamage() - i.getItemDamage();
         if(Main.debug) {
             msg("\u00A7c\u00A7l------ Event triggered ------\n\u00A7eEvent: \u00A74Shovel in main hand\n\u00A7eTool used: \u00A74" + (Main.format ? formatNumber(itemUsedInt) : itemUsedInt) + "\n\u00A7eTool warn: \u00A74" + (Main.format ? formatNumber(itemWarnInt) : itemWarnInt) + "\n\u00A7c\u00A7l---------------------------", false);
         }
@@ -135,6 +161,12 @@ public class Util {
         if(itemUsedInt == itemWarnInt) {
             if(!shovelWarned) {
                 msg(Main.warnMsg.replace("{durability}", Main.warnPercentageShovel + ""), true);
+                Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
+                shovelWarned = true;
+            }
+        } else if(isLastHit(i)) {
+            if(!shovelWarned) {
+                msg(Main.lastHitMsg, true);
                 Minecraft.getMinecraft().displayGuiScreen(new GuiChat());
                 shovelWarned = true;
             }

@@ -6,14 +6,15 @@
 ### You can customize these Settings:
 - If the addon is enabled or not
 - If durability numbers should be formatted (Formatted = 1.562 | Not Formatted = 1562)
-- If the debug mode is enabled or not (not recommended)
+- If you should be warned at durability 0
+- If the debug mode is enabled or not (not recommended -> for developing purposes)
 - The message that pops up, when your tool's durability is low
-- At what percentage of durability the warning should come (customizable for each tooltype)
+- At what percentage of durability the warning should be displayed (customizable for each tooltype)
 
 ### Installation
 1. Press `Win` + `R`
 2. Paste this into the window that popped up: `%appdata%/.minecraft/LabyMod/addons-1.12` and press enter
-3. It should open your Labymod addon directory; Paste the [Toolbreak_Warning.jar](https://github.com/RappyTV/Toolbreak-Warning/releases/download/1.2.0/Toolbreak_Warning.jar) in there.
+3. It should open your Labymod addon directory; Paste the [Toolbreak_Warning.jar](https://github.com/RappyTV/Toolbreak-Warning/releases/download/1.3.0/Toolbreak_Warning.jar) in there.
 4. Launch your Labymod client.
 
 If you have any problems with the addon/have update ideas, feel free to

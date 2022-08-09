@@ -18,6 +18,8 @@ public class Main extends LabyModAddon {
     public static boolean format = true;
     public static boolean debug = false;
     public static String warnMsg = "\u00A7cDo you really want to continue using this tool? Its durability is {durability}%!";
+    public static String lastHitMsg = "\u00A7cYou should stop using this tool now, this is your last hit!";
+    public static boolean lastHitWarn = true;
     public static int warnPercentageSword = 5;
     public static int warnPercentagePickaxe = 5;
     public static int warnPercentageAxe = 5;
@@ -41,6 +43,7 @@ public class Main extends LabyModAddon {
         debug = getConfig().has("debug") ? getConfig().get("debug").getAsBoolean() : debug;
         warnMsg = getConfig().has("warnmsg") ? getConfig().get("warnmsg").getAsString() : warnMsg;
 
+        lastHitWarn = getConfig().has("lastHitWarn") ? getConfig().get("lastHitWarn").getAsBoolean() : lastHitWarn;
         warnPercentageSword = getConfig().has("sword") ? getConfig().get("sword").getAsInt() : warnPercentageSword;
         warnPercentagePickaxe = getConfig().has("pick") ? getConfig().get("pick").getAsInt() : warnPercentagePickaxe;
         warnPercentageAxe = getConfig().has("axe") ? getConfig().get("axe").getAsInt() : warnPercentageAxe;
@@ -49,17 +52,6 @@ public class Main extends LabyModAddon {
 
     @Override
     protected void fillSettings(List<SettingsElement> list) {
-        BooleanElement enabledBool = new BooleanElement("Enabled", new ControlElement.IconData(Material.LEVER), new Consumer<Boolean>() {
-
-            @Override
-            public void accept(Boolean accepted) {
-                enabled = accepted;
-
-                getConfig().addProperty("enabled", enabled);
-                saveConfig();
-            }
-        }, enabled);
-
         BooleanElement formatBool = new BooleanElement("Format Numbers", new ControlElement.IconData(new ResourceLocation("prevtb/textures/format.png")), new Consumer<Boolean>() {
 
             @Override
@@ -71,7 +63,18 @@ public class Main extends LabyModAddon {
             }
         }, format);
 
-        BooleanElement debugBool = new BooleanElement("Debug Mode (not recommended)", new ControlElement.IconData(new ResourceLocation("prevtb/textures/matrix.png")), new Consumer<Boolean>() {
+        BooleanElement warnOnLastHit = new BooleanElement("Warn on last hit", new ControlElement.IconData(new ResourceLocation("prevtb/textures/0p.png")), new Consumer<Boolean>() {
+
+            @Override
+            public void accept(Boolean accepted) {
+                lastHitWarn = accepted;
+
+                getConfig().addProperty("lastHitWarn", lastHitWarn);
+                saveConfig();
+            }
+        }, lastHitWarn);
+
+        BooleanElement debugBool = new BooleanElement("Debug Mode (Development Feature)", new ControlElement.IconData(new ResourceLocation("prevtb/textures/matrix.png")), new Consumer<Boolean>() {
 
             @Override
             public void accept(Boolean accepted) {
@@ -101,6 +104,41 @@ public class Main extends LabyModAddon {
                 new ControlElement.IconData(Material.IRON_AXE), warnPercentageAxe);
         SliderElement spadeSlider = new SliderElement( "Shovel Warn Percentage",
                 new ControlElement.IconData(Material.IRON_SPADE), warnPercentageShovel);
+
+
+        BooleanElement enabledBool = new BooleanElement("Enabled", new ControlElement.IconData(Material.LEVER), new Consumer<Boolean>() {
+
+            @Override
+            public void accept(Boolean accepted) {
+                enabled = accepted;
+
+                formatBool.setBlocked(!enabled);
+                formatBool.setHoverable(enabled);
+                warnOnLastHit.setBlocked(!enabled);
+                warnOnLastHit.setHoverable(enabled);
+                debugBool.setBlocked(!enabled);
+                debugBool.setHoverable(enabled);
+                warnmsg.setBlocked(!enabled);
+                warnmsg.setHoverable(enabled);
+                swordSlider.setBlocked(!enabled);
+                swordSlider.setHoverable(enabled);
+                pickSlider.setBlocked(!enabled);
+                pickSlider.setHoverable(enabled);
+                axeSlider.setBlocked(!enabled);
+                axeSlider.setHoverable(enabled);
+                spadeSlider.setBlocked(!enabled);
+                spadeSlider.setHoverable(enabled);
+
+                getConfig().addProperty("enabled", enabled);
+                saveConfig();
+            }
+        }, enabled);
+
+        formatBool.setDescriptionText("Unformatted Number: 1561\nFormatted Number: 1.561");
+
+        debugBool.setDescriptionText("Sends a message in the chat every tick you're holding a tool.");
+
+        warnOnLastHit.setDescriptionText("Warns you when your tool is at 0 durability");
 
         {
             // Setting the slider's min & max values
@@ -183,9 +221,12 @@ public class Main extends LabyModAddon {
         }
 
         // Adding setting
+        list.add(new HeaderElement("General"));
         list.add(enabledBool);
         list.add(formatBool);
+        list.add(warnOnLastHit);
         list.add(debugBool);
+        list.add(new HeaderElement("\u00A7cWarn Settings"));
         list.add(warnmsg);
         list.add(swordSlider);
         list.add(pickSlider);
