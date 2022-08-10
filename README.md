@@ -18,7 +18,7 @@
 4. Launch your Labymod client.
 
 If you have any problems with the addon/have update ideas, feel free to
-- Open an Issue [here](https://github.com/RappyTV/Toolbreak-Warning/issues/new/choose)
+- Open an Issue [here](https://github.com/RappyLabyAddons/Toolbreak-Warning/issues/new/choose)
   or
 - Open a ticket on my [Discord Server](https://rappytv.com/server) in [this](https://discord.com/channels/815912035124248587/840285653946204181) channel
 
