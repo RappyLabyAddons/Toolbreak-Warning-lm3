@@ -1,3 +1,10 @@
+# THIS IS FOR LABYMOD 3!
+### [Toolbreak Warning (LabyMod 4)](https://github.com/RappyLabyAddons/Toolbreak-Warning)
+
+<br>
+<br>
+<br>
+
 # **Toolbreak Warning**
 ## Now works without Forge
 > With this plugin you can prevent breaking your expensive tools, especially when you're mining with high efficiency enchantments and/or haste.
